@@ -259,3 +259,156 @@ export async function getOpponentsForRange(
 
   return opponents;
 }
+
+export interface OpponentSquadPlayer {
+  id: string;
+  name: string;
+  team: string;
+  position: "GK" | "DEF" | "MID" | "FWD";
+  isCaptain: boolean;
+  isViceCaptain: boolean;
+  isStarting: boolean; // positions 1-11 are starting
+}
+
+export interface OpponentSquadResult {
+  players: OpponentSquadPlayer[];
+  fetchedFromGW: number; // The GW the data was actually fetched from
+  requestedGW: number; // The GW that was originally requested
+}
+
+/**
+ * Fetch opponent's squad for a specific gameweek.
+ * If the requested GW isn't available, falls back to the most recent available GW.
+ */
+export async function fetchOpponentSquad(
+  opponentTeamId: number,
+  gameweek: number
+): Promise<OpponentSquadResult | null> {
+  const bootstrap = await fetchBootstrap();
+
+  // Create lookup maps
+  const playerMap = new Map<number, FPLPlayer>();
+  for (const p of bootstrap.elements) {
+    playerMap.set(p.id, p);
+  }
+
+  const teamMap = new Map<number, string>();
+  for (const t of bootstrap.teams) {
+    teamMap.set(t.id, t.short_name);
+  }
+
+  // Find the most recent finished GW
+  const finishedGWs = bootstrap.events
+    .filter((e) => e.finished)
+    .map((e) => e.id)
+    .sort((a, b) => b - a); // descending
+
+  // Try requested GW first, then fall back to most recent finished GWs
+  const gwsToTry = [gameweek, ...finishedGWs.filter((gw) => gw !== gameweek)];
+
+  for (const gwToTry of gwsToTry) {
+    try {
+      const picksData = await fetchPicks(String(opponentTeamId), gwToTry);
+
+      // Convert picks to our format
+      const players: OpponentSquadPlayer[] = [];
+      for (const pick of picksData.picks) {
+        const fplPlayer = playerMap.get(pick.element);
+        if (!fplPlayer) continue;
+
+        players.push({
+          id: `fpl-${pick.element}`,
+          name: fplPlayer.web_name,
+          team: teamMap.get(fplPlayer.team) ?? "???",
+          position: mapPosition(fplPlayer.element_type),
+          isCaptain: pick.is_captain,
+          isViceCaptain: pick.is_vice_captain,
+          isStarting: pick.position <= 11
+        });
+      }
+
+      return {
+        players,
+        fetchedFromGW: gwToTry,
+        requestedGW: gameweek
+      };
+    } catch {
+      // Try next GW
+    }
+  }
+
+  // No GW had available picks
+  return null;
+}
+
+export interface FPLFixture {
+  event: number | null; // null if not assigned to a GW yet
+  team_h: number;
+  team_a: number;
+  finished: boolean;
+}
+
+export interface GameweekFixtureInfo {
+  dgwTeams: string[]; // Teams with 2+ fixtures
+  bgwTeams: string[]; // Teams with 0 fixtures
+}
+
+/**
+ * Analyze fixtures from bootstrap to detect DGWs and BGWs per gameweek.
+ * Returns a map of GW -> {dgwTeams, bgwTeams}
+ */
+export async function detectFixtureAnomalies(): Promise<Record<number, GameweekFixtureInfo>> {
+  const bootstrap = await fetchBootstrap();
+
+  // Get team short names
+  const teamMap = new Map<number, string>();
+  for (const t of bootstrap.teams) {
+    teamMap.set(t.id, t.short_name);
+  }
+
+  // Fetch fixtures from the API
+  const fixturesRes = await fetch(`${FPL_PROXY}/fixtures/`);
+  if (!fixturesRes.ok) throw new Error("Failed to fetch fixtures");
+  const fixtures: FPLFixture[] = await fixturesRes.json();
+
+  // Count games per team per GW
+  const gameCount: Record<number, Record<number, number>> = {};
+
+  for (const fixture of fixtures) {
+    if (fixture.event === null) continue; // Skip unassigned fixtures
+
+    const gw = fixture.event;
+    if (!gameCount[gw]) gameCount[gw] = {};
+
+    // Count for home team
+    gameCount[gw][fixture.team_h] = (gameCount[gw][fixture.team_h] || 0) + 1;
+    // Count for away team
+    gameCount[gw][fixture.team_a] = (gameCount[gw][fixture.team_a] || 0) + 1;
+  }
+
+  // Detect DGWs and BGWs
+  const result: Record<number, GameweekFixtureInfo> = {};
+
+  for (const gwStr in gameCount) {
+    const gw = Number(gwStr);
+    const dgwTeams: string[] = [];
+    const bgwTeams: string[] = [];
+
+    // Check each team
+    for (const team of bootstrap.teams) {
+      const count = gameCount[gw][team.id] || 0;
+
+      if (count >= 2) {
+        dgwTeams.push(team.short_name);
+      } else if (count === 0) {
+        bgwTeams.push(team.short_name);
+      }
+    }
+
+    if (dgwTeams.length > 0 || bgwTeams.length > 0) {
+      result[gw] = { dgwTeams, bgwTeams };
+    }
+  }
+
+  return result;
+}

@@ -39,7 +39,8 @@ export default function H2HPanel() {
       theirPlayers,
       selectedGW,
       myCaptainId,
-      undefined
+      undefined,
+      activePlan
     );
   }, [activePlan, selectedGW]);
 

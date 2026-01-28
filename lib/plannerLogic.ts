@@ -7,16 +7,73 @@ import {
   Player,
   ChipEvent,
   TransferInEvent,
-  TransferOutEvent
+  TransferOutEvent,
+  Plan
 } from "./models";
-import { DOUBLE_GAMEWEEK_TEAMS } from "./fixtures";
+import { DOUBLE_GAMEWEEK_TEAMS, BLANK_GAMEWEEK_TEAMS } from "./fixtures";
 
 /**
  * Check if a team has a double gameweek.
+ * Checks both API-detected fixtures and manual overrides from the plan.
+ * Manual overrides take precedence.
  */
-export function isTeamDoubling(team: string, gameweek: number): boolean {
+export function isTeamDoubling(
+  team: string,
+  gameweek: number,
+  plan?: Plan,
+  apiDGWTeams?: string[]
+): boolean {
+  const teamUpper = team.toUpperCase();
+
+  // Check manual overrides first (if plan provided)
+  if (plan?.manualDGW[gameweek]?.includes(teamUpper)) {
+    return true;
+  }
+
+  // Check if manually marked as blanking (takes precedence)
+  if (plan?.manualBGW[gameweek]?.includes(teamUpper)) {
+    return false;
+  }
+
+  // Check API-detected DGWs (if provided)
+  if (apiDGWTeams?.includes(teamUpper)) {
+    return true;
+  }
+
+  // Fall back to hardcoded data (legacy/mock)
   const doublingTeams = DOUBLE_GAMEWEEK_TEAMS[gameweek] ?? [];
-  return doublingTeams.includes(team.toUpperCase());
+  return doublingTeams.includes(teamUpper);
+}
+
+/**
+ * Check if a team has a blank gameweek.
+ */
+export function isTeamBlanking(
+  team: string,
+  gameweek: number,
+  plan?: Plan,
+  apiBGWTeams?: string[]
+): boolean {
+  const teamUpper = team.toUpperCase();
+
+  // Check manual overrides first
+  if (plan?.manualBGW[gameweek]?.includes(teamUpper)) {
+    return true;
+  }
+
+  // Check if manually marked as doubling (takes precedence)
+  if (plan?.manualDGW[gameweek]?.includes(teamUpper)) {
+    return false;
+  }
+
+  // Check API-detected BGWs (if provided)
+  if (apiBGWTeams?.includes(teamUpper)) {
+    return true;
+  }
+
+  // Fall back to hardcoded data
+  const blankingTeams = BLANK_GAMEWEEK_TEAMS[gameweek] ?? [];
+  return blankingTeams.includes(teamUpper);
 }
 
 /**
@@ -115,7 +172,7 @@ export function applyPlanEventsUpToGW(
 export function computeSquadSummaryForGW(
   squad: Squad,
   gameweek: number,
-  options: { includeBench?: boolean } = {}
+  options: { includeBench?: boolean; plan?: Plan } = {}
 ): {
   totalPlayers: number;
   xiCount: number;
@@ -124,7 +181,7 @@ export function computeSquadSummaryForGW(
   positionCounts: Record<string, number>;
 } {
   const slots = squad.perGameweekSlots[gameweek] ?? [];
-  const { includeBench = false } = options;
+  const { includeBench = false, plan } = options;
 
   const xiSlots = slots.filter((s) => s.role === "XI");
   const benchSlots = slots.filter((s) => s.role === "BENCH");
@@ -135,7 +192,7 @@ export function computeSquadSummaryForGW(
     .filter((p): p is Player => p !== undefined);
 
   const doublingPlayers = relevantPlayers.filter((p) =>
-    isTeamDoubling(p.team, gameweek)
+    isTeamDoubling(p.team, gameweek, plan)
   );
 
   const positionCounts: Record<string, number> = {

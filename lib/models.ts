@@ -95,6 +95,8 @@ export interface Plan {
   planEvents: PlanEvent[];
   captains: Record<number, string | undefined>;
   opponentSquads: OpponentSquadByGW;
+  manualDGW: Record<number, string[]>; // GW -> team codes (e.g., {26: ["ARS", "LIV"]})
+  manualBGW: Record<number, string[]>; // GW -> team codes (e.g., {31: ["MCI", "TOT"]})
   createdAt: number;
   updatedAt: number;
 }
@@ -143,6 +145,8 @@ export function createEmptyPlan(
     planEvents: [],
     captains: {},
     opponentSquads: {},
+    manualDGW: {},
+    manualBGW: {},
     createdAt: now,
     updatedAt: now
   };

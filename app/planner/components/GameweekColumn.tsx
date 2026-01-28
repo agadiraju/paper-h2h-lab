@@ -2,8 +2,9 @@
 
 import { useUserStore } from "@/lib/store/userStore";
 import PlayerTile from "./PlayerTile";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ChipType } from "@/lib/models";
+import H2HComparisonModal from "./H2HComparisonModal";
 
 interface GameweekColumnProps {
   gameweek: number;
@@ -12,6 +13,7 @@ interface GameweekColumnProps {
 export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
   const { getActivePlan } = useUserStore();
   const activePlan = getActivePlan();
+  const [showH2HModal, setShowH2HModal] = useState(false);
 
   if (!activePlan) return null;
 
@@ -43,12 +45,18 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
     activePlan.squad.players.find((p) => p.id === playerId);
 
   return (
-    <div className="w-44 flex-shrink-0 rounded-lg border border-slate-800 bg-slate-900/50 flex flex-col">
+    <div className="w-44 flex-shrink-0 rounded-lg border border-slate-800 bg-slate-900/50 flex flex-col group">
       {/* Header */}
-      <div className="px-3 py-2 border-b border-slate-800">
+      <div
+        className="px-3 py-2 border-b border-slate-800 cursor-pointer hover:bg-slate-800/50 transition-colors"
+        onClick={() => setShowH2HModal(true)}
+      >
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-100">
             GW{gameweek}
+          </span>
+          <span className="text-[10px] text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+            View H2H
           </span>
         </div>
         {opponent && (
@@ -113,6 +121,14 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
           <div className="text-[11px] text-slate-600 italic">No bench</div>
         )}
       </div>
+
+      {/* H2H Comparison Modal */}
+      {showH2HModal && (
+        <H2HComparisonModal
+          gameweek={gameweek}
+          onClose={() => setShowH2HModal(false)}
+        />
+      )}
     </div>
   );
 }

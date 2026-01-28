@@ -1,7 +1,7 @@
 // lib/h2hLogic.ts
 // Head-to-head comparison logic for Paper H2H Lab.
 
-import { Player, HeadToHeadResult, RiskLevel } from "./models";
+import { Player, HeadToHeadResult, RiskLevel, Plan } from "./models";
 import { isTeamDoubling } from "./plannerLogic";
 
 export function computeHeadToHeadRisk(
@@ -9,7 +9,8 @@ export function computeHeadToHeadRisk(
   theirPlayers: Player[],
   gameweek: number,
   myCaptainId?: string,
-  theirCaptainId?: string
+  theirCaptainId?: string,
+  plan?: Plan
 ): HeadToHeadResult {
   const myIds = new Set(myPlayers.map((p) => p.id));
   const theirIds = new Set(theirPlayers.map((p) => p.id));
@@ -26,10 +27,10 @@ export function computeHeadToHeadRisk(
   const theirCaptain = theirPlayers.find((p) => p.id === theirCaptainId);
 
   const myCaptainDoubling = myCaptain
-    ? isTeamDoubling(myCaptain.team, gameweek)
+    ? isTeamDoubling(myCaptain.team, gameweek, plan)
     : false;
   const theirCaptainDoubling = theirCaptain
-    ? isTeamDoubling(theirCaptain.team, gameweek)
+    ? isTeamDoubling(theirCaptain.team, gameweek, plan)
     : false;
 
   const riskLevel = deriveRiskLevel({
