@@ -91,23 +91,23 @@ export default function H2HPanel() {
   };
 
   const riskColors = {
-    green: "bg-green-900/50 border-green-700 text-green-400",
-    amber: "bg-amber-900/50 border-amber-700 text-amber-400",
-    red: "bg-red-900/50 border-red-700 text-red-400"
+    green: "bg-primary/10 border-primary/40 text-primary",
+    amber: "bg-warning/10 border-warning/40 text-warning",
+    red: "bg-danger/10 border-danger/40 text-danger"
   };
 
   return (
     <div className="p-3">
-      <h2 className="text-xs font-semibold mb-3 text-slate-200 uppercase tracking-wide">
+      <h2 className="text-xs font-bold mb-3 text-ink uppercase tracking-wide">
         H2H comparison
       </h2>
 
       <div className="space-y-3 text-xs">
         {/* GW selector */}
         <div>
-          <label className="text-slate-400 block mb-1">Gameweek</label>
+          <label className="text-ink-lighter font-medium block mb-1">Gameweek</label>
           <select
-            className="w-full rounded bg-slate-900 border border-slate-700 px-2 py-1.5 text-xs"
+            className="w-full rounded border-2 border-border bg-paper px-2 py-1.5 text-xs text-ink focus:outline-none focus:border-primary transition-colors"
             value={selectedGW ?? ""}
             onChange={(e) => setSelectedGW(Number(e.target.value))}
           >
@@ -126,20 +126,20 @@ export default function H2HPanel() {
           <>
             {/* Opponent info */}
             {opponent && (
-              <div className="rounded border border-slate-800 bg-slate-800/50 p-2">
-                <div className="text-[11px] text-slate-400">Opponent</div>
-                <div className="text-sm font-medium text-slate-200">
+              <div className="rounded border-2 border-border bg-paper p-2">
+                <div className="text-[11px] text-ink-lighter">Opponent</div>
+                <div className="text-sm font-semibold text-ink">
                   {opponent.teamName}
                 </div>
-                <div className="text-[10px] text-slate-500">
+                <div className="text-[10px] text-ink-lighter">
                   {opponent.managerName}
                 </div>
               </div>
             )}
 
             {/* Opponent squad input */}
-            <div className="border border-slate-800 rounded p-2">
-              <div className="text-[11px] text-slate-400 mb-1">
+            <div className="border-2 border-border rounded bg-paper p-2">
+              <div className="text-[11px] text-ink-lighter font-medium mb-1">
                 Opponent squad ({opponentSquad.length} players)
               </div>
               <div className="space-y-1 max-h-24 overflow-y-auto mb-2">
@@ -148,40 +148,40 @@ export default function H2HPanel() {
                     key={p.id}
                     className="flex items-center justify-between text-[11px]"
                   >
-                    <span className="text-slate-300">
+                    <span className="text-ink">
                       {p.name}{" "}
-                      <span className="text-slate-500">({p.team})</span>
+                      <span className="text-ink-lighter">({p.team})</span>
                     </span>
                     <button
                       onClick={() => handleRemoveOpponentPlayer(p.id)}
-                      className="text-slate-500 hover:text-red-400"
+                      className="text-ink-lighter hover:text-danger"
                     >
                       ×
                     </button>
                   </div>
                 ))}
                 {opponentSquad.length === 0 && (
-                  <div className="text-[10px] text-slate-600 italic">
+                  <div className="text-[10px] text-ink-lighter italic">
                     Add opponent players to see comparison
                   </div>
                 )}
               </div>
               <div className="flex gap-1">
                 <input
-                  className="flex-1 rounded bg-slate-800 border border-slate-700 px-2 py-1 text-[11px]"
+                  className="flex-1 rounded border border-border bg-paper-dark px-2 py-1 text-[11px] text-ink focus:outline-none focus:border-primary transition-colors"
                   placeholder="Player name"
                   value={newPlayerName}
                   onChange={(e) => setNewPlayerName(e.target.value)}
                 />
                 <input
-                  className="w-12 rounded bg-slate-800 border border-slate-700 px-2 py-1 text-[11px]"
+                  className="w-12 rounded border border-border bg-paper-dark px-2 py-1 text-[11px] text-ink focus:outline-none focus:border-primary transition-colors"
                   placeholder="Team"
                   value={newPlayerTeam}
                   onChange={(e) => setNewPlayerTeam(e.target.value)}
                 />
                 <button
                   onClick={handleAddOpponentPlayer}
-                  className="px-2 py-1 rounded bg-slate-700 text-[11px] hover:bg-slate-600"
+                  className="px-2 py-1 rounded border border-border bg-paper-dark text-[11px] text-ink hover:bg-paper-darker transition-colors"
                 >
                   +
                 </button>
@@ -192,40 +192,40 @@ export default function H2HPanel() {
             {h2hResult && opponentSquad.length > 0 && (
               <div className="space-y-2 mt-3">
                 <div
-                  className={`rounded border px-2 py-1.5 text-center ${
+                  className={`rounded border-2 px-2 py-1.5 text-center ${
                     riskColors[h2hResult.riskLevel]
                   }`}
                 >
-                  <div className="text-[10px] uppercase tracking-wide opacity-70">
+                  <div className="text-[10px] uppercase tracking-wide font-semibold opacity-70">
                     Risk level
                   </div>
-                  <div className="text-sm font-semibold capitalize">
+                  <div className="text-sm font-bold capitalize">
                     {h2hResult.riskLevel}
                   </div>
                 </div>
 
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">Overlap</span>
-                  <span className="text-slate-200">
+                  <span className="text-ink-lighter">Overlap</span>
+                  <span className="text-ink font-semibold">
                     {h2hResult.overlapPercentage}%
                   </span>
                 </div>
 
                 <div>
-                  <div className="text-[11px] text-slate-400 mb-1">
+                  <div className="text-[11px] text-ink-lighter font-medium mb-1">
                     Your differentials ({h2hResult.myDifferentials.length})
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {h2hResult.myDifferentials.slice(0, 6).map((p) => (
                       <span
                         key={p.id}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-green-900/30 text-green-400 border border-green-800"
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/40 font-medium"
                       >
                         {p.name}
                       </span>
                     ))}
                     {h2hResult.myDifferentials.length > 6 && (
-                      <span className="text-[10px] text-slate-500">
+                      <span className="text-[10px] text-ink-lighter">
                         +{h2hResult.myDifferentials.length - 6}
                       </span>
                     )}
@@ -233,20 +233,20 @@ export default function H2HPanel() {
                 </div>
 
                 <div>
-                  <div className="text-[11px] text-slate-400 mb-1">
+                  <div className="text-[11px] text-ink-lighter font-medium mb-1">
                     Their differentials ({h2hResult.theirDifferentials.length})
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {h2hResult.theirDifferentials.slice(0, 6).map((p) => (
                       <span
                         key={p.id}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-red-900/30 text-red-400 border border-red-800"
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-danger/10 text-danger border border-danger/40 font-medium"
                       >
                         {p.name}
                       </span>
                     ))}
                     {h2hResult.theirDifferentials.length > 6 && (
-                      <span className="text-[10px] text-slate-500">
+                      <span className="text-[10px] text-ink-lighter">
                         +{h2hResult.theirDifferentials.length - 6}
                       </span>
                     )}

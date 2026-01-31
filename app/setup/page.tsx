@@ -229,64 +229,64 @@ export default function SetupPage() {
   );
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-paper">
       <div className="w-full max-w-lg">
         {/* Progress indicator */}
         <div className="flex items-center justify-center gap-2 mb-8">
           {["fpl-id", "import-squad", "create-plan"].map((s, idx) => (
             <div key={s} className="flex items-center gap-2">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium border ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold border-2 ${
                   step === s
-                    ? "bg-green-600 border-green-500 text-white"
+                    ? "bg-primary border-primary text-white"
                     : idx <
                       ["fpl-id", "import-squad", "create-plan"].indexOf(step)
-                    ? "bg-green-900 border-green-700 text-green-400"
-                    : "bg-slate-800 border-slate-700 text-slate-500"
+                    ? "bg-primary/20 border-primary text-primary"
+                    : "bg-paper-dark border-border text-ink-lighter"
                 }`}
               >
                 {idx + 1}
               </div>
               {idx < 2 && (
-                <div className="w-8 h-px bg-slate-700" />
+                <div className="w-8 h-px bg-border" />
               )}
             </div>
           ))}
         </div>
 
         {/* Step content */}
-        <div className="rounded-lg border border-slate-800 bg-slate-900/50 p-6">
+        <div className="rounded-lg border-2 border-border bg-paper-dark p-6 paper-shadow">
           {/* Step 1: FPL ID */}
           {step === "fpl-id" && (
             <>
-              <h1 className="text-xl font-semibold text-slate-100 mb-2">
+              <h1 className="text-xl font-semibold text-ink mb-2">
                 Connect your FPL account
               </h1>
-              <p className="text-sm text-slate-400 mb-6">
+              <p className="text-sm text-ink-lighter mb-6 leading-relaxed">
                 Enter your FPL Team ID to import your squad and H2H leagues.
                 You can find it in your team's URL on the FPL website.
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-ink-lighter mb-1">
                     FPL Team ID
                   </label>
                   <input
                     type="text"
-                    className="w-full rounded bg-slate-800 border border-slate-700 px-3 py-2 text-sm"
+                    className="w-full rounded border-2 border-border bg-paper px-3 py-2 text-sm text-ink focus:outline-none focus:border-primary transition-colors"
                     placeholder="e.g. 1234567"
                     value={inputTeamId}
                     onChange={(e) => setInputTeamId(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleConnectFPL()}
                   />
-                  <p className="text-[11px] text-slate-500 mt-1">
+                  <p className="text-[11px] text-ink-lighter mt-1">
                     Find it at: fantasy.premierleague.com/entry/[YOUR_ID]/event/...
                   </p>
                 </div>
 
                 {error && (
-                  <div className="text-xs text-red-400 bg-red-900/20 border border-red-800 rounded px-3 py-2">
+                  <div className="text-xs text-danger bg-danger/10 border-2 border-danger/30 rounded px-3 py-2">
                     {error}
                   </div>
                 )}
@@ -294,7 +294,7 @@ export default function SetupPage() {
                 <button
                   onClick={handleConnectFPL}
                   disabled={loading}
-                  className="w-full rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full rounded border-2 border-primary bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark hover:border-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? "Connecting..." : "Connect"}
                 </button>
@@ -305,32 +305,32 @@ export default function SetupPage() {
           {/* Step 2: Import Squad */}
           {step === "import-squad" && (
             <>
-              <h1 className="text-xl font-semibold text-slate-100 mb-2">
+              <h1 className="text-xl font-semibold text-ink mb-2">
                 Import your squad
               </h1>
-              <p className="text-sm text-slate-400 mb-6">
+              <p className="text-sm text-ink-lighter mb-6 leading-relaxed">
                 We'll import your current squad from GW{currentGW} as the
                 starting point for your plan.
               </p>
 
-              <div className="rounded border border-slate-800 bg-slate-800/50 p-4 mb-6">
-                <div className="text-sm font-medium text-slate-200 mb-1">
+              <div className="rounded border-2 border-border bg-paper p-4 mb-6">
+                <div className="text-sm font-semibold text-ink mb-1">
                   {fplTeamName}
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-ink-lighter">
                   {h2hLeagues.length} H2H league{h2hLeagues.length !== 1 && "s"} found
                 </div>
                 <div className="mt-2 flex flex-wrap gap-1">
                   {h2hLeagues.slice(0, 3).map((l) => (
                     <span
                       key={l.id}
-                      className="text-[10px] px-2 py-0.5 rounded bg-slate-700 text-slate-300"
+                      className="text-[10px] px-2 py-0.5 rounded border border-border bg-paper-dark text-ink"
                     >
                       {l.name}
                     </span>
                   ))}
                   {h2hLeagues.length > 3 && (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-700 text-slate-400">
+                    <span className="text-[10px] px-2 py-0.5 rounded border border-border bg-paper-dark text-ink-lighter">
                       +{h2hLeagues.length - 3} more
                     </span>
                   )}
@@ -338,7 +338,7 @@ export default function SetupPage() {
               </div>
 
               {error && (
-                <div className="text-xs text-red-400 bg-red-900/20 border border-red-800 rounded px-3 py-2 mb-4">
+                <div className="text-xs text-danger bg-danger/10 border-2 border-danger/30 rounded px-3 py-2 mb-4">
                   {error}
                 </div>
               )}
@@ -346,14 +346,14 @@ export default function SetupPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep("fpl-id")}
-                  className="flex-1 rounded bg-slate-800 px-4 py-2 text-sm text-slate-300 hover:bg-slate-700"
+                  className="flex-1 rounded border-2 border-border bg-paper px-4 py-2 text-sm text-ink-light hover:bg-paper-darker transition-colors"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleImportSquad}
                   disabled={loading}
-                  className="flex-1 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50"
+                  className="flex-1 rounded border-2 border-primary bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark hover:border-primary-dark disabled:opacity-50 transition-colors"
                 >
                   {loading ? "Importing..." : "Import Squad"}
                 </button>
@@ -364,30 +364,30 @@ export default function SetupPage() {
           {/* Step 3: Create Plan */}
           {step === "create-plan" && (
             <>
-              <h1 className="text-xl font-semibold text-slate-100 mb-2">
+              <h1 className="text-xl font-semibold text-ink mb-2">
                 Create your plan
               </h1>
-              <p className="text-sm text-slate-400 mb-6">
+              <p className="text-sm text-ink-lighter mb-6 leading-relaxed">
                 Set up a planning window for one of your H2H leagues.
               </p>
 
               <div className="space-y-4">
                 {/* Squad preview */}
-                <div className="rounded border border-slate-800 bg-slate-800/50 p-3">
-                  <div className="text-xs text-slate-400 mb-2">
+                <div className="rounded border-2 border-border bg-paper p-3">
+                  <div className="text-xs font-medium text-ink-lighter mb-2">
                     Imported squad ({importedPlayers.length} players)
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {importedPlayers.slice(0, 8).map((p) => (
                       <span
                         key={p.id}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-300"
+                        className="text-[10px] px-1.5 py-0.5 rounded border border-border bg-paper-dark text-ink"
                       >
                         {p.name}
                       </span>
                     ))}
                     {importedPlayers.length > 8 && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded border border-border bg-paper-dark text-ink-lighter">
                         +{importedPlayers.length - 8} more
                       </span>
                     )}
@@ -396,12 +396,12 @@ export default function SetupPage() {
 
                 {/* Plan name */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-ink-lighter mb-1">
                     Plan name
                   </label>
                   <input
                     type="text"
-                    className="w-full rounded bg-slate-800 border border-slate-700 px-3 py-2 text-sm"
+                    className="w-full rounded border-2 border-border bg-paper px-3 py-2 text-sm text-ink focus:outline-none focus:border-primary transition-colors"
                     placeholder="e.g. ML Cup Push, Work League"
                     value={planName}
                     onChange={(e) => setPlanName(e.target.value)}
@@ -410,11 +410,11 @@ export default function SetupPage() {
 
                 {/* League selection */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">
+                  <label className="block text-xs font-medium text-ink-lighter mb-1">
                     H2H League
                   </label>
                   <select
-                    className="w-full rounded bg-slate-800 border border-slate-700 px-3 py-2 text-sm"
+                    className="w-full rounded border-2 border-border bg-paper px-3 py-2 text-sm text-ink focus:outline-none focus:border-primary transition-colors"
                     value={selectedLeagueId ?? ""}
                     onChange={(e) => setSelectedLeagueId(Number(e.target.value))}
                   >
@@ -429,11 +429,11 @@ export default function SetupPage() {
                 {/* GW range */}
                 <div className="flex gap-3">
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">
+                    <label className="block text-xs font-medium text-ink-lighter mb-1">
                       Start GW
                     </label>
                     <select
-                      className="w-full rounded bg-slate-800 border border-slate-700 px-3 py-2 text-sm"
+                      className="w-full rounded border-2 border-border bg-paper px-3 py-2 text-sm text-ink focus:outline-none focus:border-primary transition-colors"
                       value={startGW}
                       onChange={(e) => {
                         const newStart = Number(e.target.value);
@@ -455,11 +455,11 @@ export default function SetupPage() {
                     </select>
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs text-slate-400 mb-1">
+                    <label className="block text-xs font-medium text-ink-lighter mb-1">
                       End GW
                     </label>
                     <select
-                      className="w-full rounded bg-slate-800 border border-slate-700 px-3 py-2 text-sm"
+                      className="w-full rounded border-2 border-border bg-paper px-3 py-2 text-sm text-ink focus:outline-none focus:border-primary transition-colors"
                       value={endGW}
                       onChange={(e) => setEndGW(Number(e.target.value))}
                     >
@@ -475,18 +475,18 @@ export default function SetupPage() {
                     </select>
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-ink-lighter">
                   Max {MAX_GW_SPAN} gameweeks per plan. Only current and future gameweeks available.
                 </p>
 
                 {/* Opponent preview */}
                 <div>
-                  <label className="block text-xs text-slate-400 mb-2">
+                  <label className="block text-xs font-medium text-ink-lighter mb-2">
                     Opponent schedule
                   </label>
-                  <div className="rounded border border-slate-800 bg-slate-800/50 p-2 space-y-1 max-h-32 overflow-y-auto">
+                  <div className="rounded border-2 border-border bg-paper p-2 space-y-1 max-h-32 overflow-y-auto">
                     {loadingOpponents ? (
-                      <div className="text-xs text-slate-500 py-2 text-center">
+                      <div className="text-xs text-ink-lighter py-2 text-center">
                         Loading opponents...
                       </div>
                     ) : (
@@ -498,8 +498,8 @@ export default function SetupPage() {
                           key={gw}
                           className="flex items-center justify-between text-xs"
                         >
-                          <span className="text-slate-400">GW{gw}</span>
-                          <span className="text-slate-200">
+                          <span className="text-ink-lighter">GW{gw}</span>
+                          <span className="text-ink font-medium">
                             {opponentPreview[gw]
                               ? `vs ${opponentPreview[gw].teamName}`
                               : "TBD"}
@@ -511,7 +511,7 @@ export default function SetupPage() {
                 </div>
 
                 {error && (
-                  <div className="text-xs text-red-400 bg-red-900/20 border border-red-800 rounded px-3 py-2">
+                  <div className="text-xs text-danger bg-danger/10 border-2 border-danger/30 rounded px-3 py-2">
                     {error}
                   </div>
                 )}
@@ -519,13 +519,13 @@ export default function SetupPage() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => setStep("import-squad")}
-                    className="flex-1 rounded bg-slate-800 px-4 py-2 text-sm text-slate-300 hover:bg-slate-700"
+                    className="flex-1 rounded border-2 border-border bg-paper px-4 py-2 text-sm text-ink-light hover:bg-paper-darker transition-colors"
                   >
                     Back
                   </button>
                   <button
                     onClick={handleCreatePlan}
-                    className="flex-1 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500"
+                    className="flex-1 rounded border-2 border-primary bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark hover:border-primary-dark transition-colors"
                   >
                     Create Plan
                   </button>
@@ -540,7 +540,7 @@ export default function SetupPage() {
           <div className="mt-4 text-center">
             <button
               onClick={() => router.push("/planner")}
-              className="text-xs text-slate-400 hover:text-slate-200"
+              className="text-xs text-ink-lighter hover:text-ink underline-offset-4 hover:underline"
             >
               You have {plans.length} existing plan{plans.length !== 1 && "s"} →
               Go to planner

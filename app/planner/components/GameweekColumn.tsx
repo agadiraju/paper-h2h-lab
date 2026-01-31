@@ -45,22 +45,22 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
     activePlan.squad.players.find((p) => p.id === playerId);
 
   return (
-    <div className="w-44 flex-shrink-0 rounded-lg border border-slate-800 bg-slate-900/50 flex flex-col group">
+    <div className="w-44 flex-shrink-0 rounded-lg border-2 border-border bg-paper-dark paper-shadow flex flex-col group">
       {/* Header */}
       <div
-        className="px-3 py-2 border-b border-slate-800 cursor-pointer hover:bg-slate-800/50 transition-colors"
+        className="px-3 py-2 border-b-2 border-border cursor-pointer hover:bg-paper-darker transition-colors"
         onClick={() => setShowH2HModal(true)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-slate-100">
+          <span className="text-sm font-bold text-ink">
             GW{gameweek}
           </span>
-          <span className="text-[10px] text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="text-[10px] text-ink-lighter opacity-0 group-hover:opacity-100 transition-opacity">
             View H2H
           </span>
         </div>
         {opponent && (
-          <div className="text-[11px] text-slate-400 mt-0.5">
+          <div className="text-[11px] text-ink-lighter mt-0.5">
             vs {opponent.teamName}
           </div>
         )}
@@ -69,7 +69,7 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
             {chips.map((chip) => (
               <span
                 key={chip.chip}
-                className="text-[10px] px-1.5 py-0.5 rounded bg-amber-900/50 text-amber-400 border border-amber-800"
+                className="text-[10px] px-1.5 py-0.5 rounded bg-warning/20 text-warning border border-warning/40 font-semibold"
               >
                 {chip.chip}
               </span>
@@ -80,7 +80,7 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
 
       {/* Starting XI */}
       <div className="flex-1 p-2 space-y-1 overflow-y-auto">
-        <div className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">
+        <div className="text-[10px] text-ink-lighter uppercase tracking-wide mb-1 font-semibold">
           Starting XI ({xiPlayers.length})
         </div>
         {xiPlayers.map((slot) => {
@@ -96,13 +96,13 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
           );
         })}
         {xiPlayers.length === 0 && (
-          <div className="text-[11px] text-slate-600 italic">No XI set</div>
+          <div className="text-[11px] text-ink-lighter/50 italic">No XI set</div>
         )}
       </div>
 
       {/* Bench */}
-      <div className="border-t border-slate-800 p-2 space-y-1">
-        <div className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">
+      <div className="border-t-2 border-border p-2 space-y-1">
+        <div className="text-[10px] text-ink-lighter uppercase tracking-wide mb-1 font-semibold">
           Bench ({benchPlayers.length})
         </div>
         {benchPlayers.slice(0, 4).map((slot) => {
@@ -118,7 +118,7 @@ export default function GameweekColumn({ gameweek }: GameweekColumnProps) {
           );
         })}
         {benchPlayers.length === 0 && (
-          <div className="text-[11px] text-slate-600 italic">No bench</div>
+          <div className="text-[11px] text-ink-lighter/50 italic">No bench</div>
         )}
       </div>
 

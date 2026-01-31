@@ -17,12 +17,12 @@ export default function HomePage() {
   }, [setupComplete, plans, router]);
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-paper">
       <div className="max-w-md text-center">
-        <h1 className="text-3xl font-bold text-slate-100 mb-4">
+        <h1 className="text-3xl font-bold text-ink mb-4 tracking-tight">
           Paper H2H Lab
         </h1>
-        <p className="text-slate-400 mb-8">
+        <p className="text-ink-lighter mb-8 leading-relaxed">
           Plan your FPL transfers with your H2H opponents in mind. Track
           differentials, doubles, blanks, and captain choices across multiple
           gameweeks.
@@ -31,7 +31,7 @@ export default function HomePage() {
         <div className="space-y-3">
           <Link
             href="/setup"
-            className="block w-full rounded bg-green-600 px-6 py-3 text-sm font-medium text-white hover:bg-green-500"
+            className="block w-full rounded border-2 border-primary bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary-dark hover:border-primary-dark transition-colors shadow-md"
           >
             Get Started
           </Link>
@@ -39,7 +39,7 @@ export default function HomePage() {
           {setupComplete && plans.length > 0 && (
             <Link
               href="/planner"
-              className="block w-full rounded bg-slate-800 px-6 py-3 text-sm text-slate-300 hover:bg-slate-700"
+              className="block w-full rounded border-2 border-border bg-paper-dark px-6 py-3 text-sm text-ink-light hover:bg-paper-darker transition-colors"
             >
               Go to Planner
             </Link>
@@ -47,17 +47,17 @@ export default function HomePage() {
         </div>
 
         <div className="mt-12 grid grid-cols-3 gap-4 text-center">
-          <div>
-            <div className="text-2xl font-bold text-green-400">H2H</div>
-            <div className="text-xs text-slate-500">Focused</div>
+          <div className="border-2 border-border rounded bg-paper-dark p-3">
+            <div className="text-2xl font-bold text-primary">H2H</div>
+            <div className="text-xs text-ink-lighter">Focused</div>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-green-400">7 GW</div>
-            <div className="text-xs text-slate-500">Max span</div>
+          <div className="border-2 border-border rounded bg-paper-dark p-3">
+            <div className="text-2xl font-bold text-primary">7 GW</div>
+            <div className="text-xs text-ink-lighter">Max span</div>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-green-400">5</div>
-            <div className="text-xs text-slate-500">Plans</div>
+          <div className="border-2 border-border rounded bg-paper-dark p-3">
+            <div className="text-2xl font-bold text-primary">5</div>
+            <div className="text-xs text-ink-lighter">Plans</div>
           </div>
         </div>
       </div>

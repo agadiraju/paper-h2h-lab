@@ -20,8 +20,8 @@ export default function GameweekTimeline() {
   if (!activePlan) return null;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="border-b border-slate-800 px-4 py-2 text-xs text-slate-400 flex justify-between items-center">
+    <div className="flex flex-col h-full bg-paper">
+      <div className="border-b-2 border-border px-4 py-2 text-xs text-ink-lighter font-medium flex justify-between items-center">
         <span>Gameweek timeline</span>
         <span className="text-[11px]">
           {visibleGWs.length} gameweeks

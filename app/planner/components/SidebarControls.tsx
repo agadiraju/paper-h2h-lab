@@ -25,17 +25,17 @@ export default function SidebarControls() {
       <div className="p-3 space-y-5">
         {/* Opponents schedule */}
         <div>
-          <h2 className="text-xs font-semibold mb-2 text-slate-200 uppercase tracking-wide">
+          <h2 className="text-xs font-bold mb-2 text-ink uppercase tracking-wide">
             Opponent Schedule
           </h2>
-          <div className="space-y-1 text-xs border border-slate-800 rounded p-2">
+          <div className="space-y-1 text-xs border-2 border-border rounded bg-paper p-2">
             {Array.from(
               { length: activePlan.endGW - activePlan.startGW + 1 },
               (_, i) => activePlan.startGW + i
             ).map((gw) => (
               <div key={gw} className="flex items-center justify-between">
-                <span className="text-slate-500">GW{gw}</span>
-                <span className="text-slate-300 truncate ml-2">
+                <span className="text-ink-lighter">GW{gw}</span>
+                <span className="text-ink font-medium truncate ml-2">
                   {activePlan.opponents[gw]
                     ? activePlan.opponents[gw].teamName
                     : "TBD"}
@@ -47,18 +47,18 @@ export default function SidebarControls() {
 
         {/* Quick actions */}
         <div>
-          <h2 className="text-xs font-semibold mb-2 text-slate-200 uppercase tracking-wide">
+          <h2 className="text-xs font-bold mb-2 text-ink uppercase tracking-wide">
             Actions
           </h2>
           <div className="space-y-2">
             <button
               onClick={() => setShowResetConfirm(true)}
-              className="w-full rounded bg-slate-900 border border-slate-700 px-2 py-1.5 text-[11px] text-slate-400 hover:bg-slate-800 hover:text-slate-300"
+              className="w-full rounded bg-paper border-2 border-border px-2 py-1.5 text-[11px] text-ink-light hover:bg-paper-dark hover:text-ink transition-colors"
             >
               Reset transfers & chips
             </button>
           </div>
-          <p className="text-[10px] text-slate-600 mt-3">
+          <p className="text-[10px] text-ink-lighter mt-3 leading-relaxed">
             Click a gameweek to view your squad, compare with your opponent, and plan transfers.
           </p>
         </div>
@@ -67,25 +67,25 @@ export default function SidebarControls() {
       {/* Reset confirmation modal */}
       {showResetConfirm && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-lg border border-slate-800 bg-slate-950 p-4 text-xs shadow-lg">
-            <div className="text-sm font-semibold text-slate-100 mb-2">
+          <div className="w-full max-w-sm rounded-lg border-2 border-border bg-paper p-4 text-xs shadow-lg">
+            <div className="text-sm font-semibold text-ink mb-2">
               Reset plan?
             </div>
-            <p className="text-[11px] text-slate-300 mb-3">
+            <p className="text-[11px] text-ink-lighter mb-3 leading-relaxed">
               This will clear all planned transfers, chips, and captains for this plan. Your squad will remain.
             </p>
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setShowResetConfirm(false)}
-                className="rounded bg-slate-800 px-3 py-1 text-[11px] text-slate-200 hover:bg-slate-700"
+                className="rounded border-2 border-border bg-paper-dark px-3 py-1 text-[11px] text-ink hover:bg-paper-darker transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleResetPlan}
-                className="rounded bg-red-600 px-3 py-1 text-[11px] text-slate-50 hover:bg-red-500"
+                className="rounded border-2 border-danger bg-danger px-3 py-1 text-[11px] text-white hover:bg-danger/90 transition-colors"
               >
                 Reset
               </button>

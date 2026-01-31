@@ -23,10 +23,10 @@ export default function PlayerTile({ player, gameweek, role }: PlayerTileProps) 
   const isCaptain = captainId === player.id;
 
   const positionColors: Record<string, string> = {
-    GK: "bg-amber-900/40 border-amber-700",
-    DEF: "bg-blue-900/40 border-blue-700",
-    MID: "bg-green-900/40 border-green-700",
-    FWD: "bg-red-900/40 border-red-700"
+    GK: "bg-[#C4956C]/10 border-[#C4956C]/40",
+    DEF: "bg-[#6B8FA8]/10 border-[#6B8FA8]/40",
+    MID: "bg-[#7A9B6E]/10 border-[#7A9B6E]/40",
+    FWD: "bg-[#B67162]/10 border-[#B67162]/40"
   };
 
   const handleToggleCaptain = (e: React.MouseEvent) => {
@@ -62,23 +62,23 @@ export default function PlayerTile({ player, gameweek, role }: PlayerTileProps) 
     <>
       <div
         onClick={() => setShowTransferDialog(true)}
-        className={`group relative rounded border px-2 py-1.5 cursor-pointer transition-colors hover:bg-slate-800/50 ${
-          positionColors[player.position] ?? "bg-slate-800 border-slate-700"
+        className={`group relative rounded border-2 px-2 py-1.5 cursor-pointer transition-colors hover:bg-paper/50 ${
+          positionColors[player.position] ?? "bg-paper border-border"
         }`}
       >
         <div className="flex items-center justify-between gap-1">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] font-medium text-slate-100 truncate">
+              <span className="text-[11px] font-semibold text-ink truncate">
                 {player.name}
               </span>
               {isCaptain && (
-                <span className="text-[9px] px-1 py-0.5 rounded bg-yellow-600 text-yellow-100 font-bold">
+                <span className="text-[9px] px-1 py-0.5 rounded bg-warning border border-warning/40 text-white font-bold">
                   C
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1 text-[10px] text-slate-400">
+            <div className="flex items-center gap-1 text-[10px] text-ink-lighter">
               <span>{player.team}</span>
             </div>
           </div>
@@ -88,10 +88,10 @@ export default function PlayerTile({ player, gameweek, role }: PlayerTileProps) 
         <div className="absolute right-1 top-1/2 -translate-y-1/2 hidden group-hover:flex gap-0.5">
           <button
             onClick={handleToggleCaptain}
-            className={`text-[9px] px-1 py-0.5 rounded ${
+            className={`text-[9px] px-1 py-0.5 rounded border ${
               isCaptain
-                ? "bg-yellow-600 text-yellow-100"
-                : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                ? "bg-warning border-warning text-white"
+                : "bg-paper-dark border-border text-ink-light hover:bg-paper-darker"
             }`}
             title={isCaptain ? "Remove captain" : "Make captain"}
           >
@@ -99,7 +99,7 @@ export default function PlayerTile({ player, gameweek, role }: PlayerTileProps) 
           </button>
           <button
             onClick={handleToggleRole}
-            className="text-[9px] px-1 py-0.5 rounded bg-slate-700 text-slate-300 hover:bg-slate-600"
+            className="text-[9px] px-1 py-0.5 rounded border bg-paper-dark border-border text-ink-light hover:bg-paper-darker"
             title={role === "XI" ? "Move to bench" : "Move to XI"}
           >
             {role === "XI" ? "↓" : "↑"}

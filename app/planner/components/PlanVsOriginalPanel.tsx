@@ -50,42 +50,42 @@ export default function PlanVsOriginalPanel() {
 
   return (
     <div className="p-3">
-      <h2 className="text-xs font-semibold mb-3 text-slate-200 uppercase tracking-wide">
+      <h2 className="text-xs font-bold mb-3 text-ink uppercase tracking-wide">
         Plan summary
       </h2>
       <div className="space-y-2 text-xs">
         <div className="flex justify-between">
-          <span className="text-slate-400">Squad size</span>
-          <span className="text-slate-200">{stats.squadSize} players</span>
+          <span className="text-ink-lighter">Squad size</span>
+          <span className="text-ink font-medium">{stats.squadSize} players</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-slate-400">Transfers in</span>
-          <span className="text-slate-200">{stats.transfersIn}</span>
+          <span className="text-ink-lighter">Transfers in</span>
+          <span className="text-ink font-medium">{stats.transfersIn}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-slate-400">Transfers out</span>
-          <span className="text-slate-200">{stats.transfersOut}</span>
+          <span className="text-ink-lighter">Transfers out</span>
+          <span className="text-ink font-medium">{stats.transfersOut}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-slate-400">Point hits</span>
-          <span className={stats.hits > 0 ? "text-red-400" : "text-slate-200"}>
+          <span className="text-ink-lighter">Point hits</span>
+          <span className={stats.hits > 0 ? "text-danger font-semibold" : "text-ink font-medium"}>
             {stats.hits > 0 ? `-${stats.hits}` : "0"}
           </span>
         </div>
         {stats.chips.length > 0 && (
           <div className="flex justify-between">
-            <span className="text-slate-400">Chips used</span>
-            <span className="text-amber-400">{stats.chips.join(", ")}</span>
+            <span className="text-ink-lighter">Chips used</span>
+            <span className="text-warning font-semibold">{stats.chips.join(", ")}</span>
           </div>
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-800">
-        <h3 className="text-xs font-medium text-slate-300 mb-2">
+      <div className="mt-4 pt-3 border-t-2 border-border">
+        <h3 className="text-xs font-semibold text-ink mb-2">
           Planned transfers
         </h3>
         {transferEvents.length === 0 ? (
-          <p className="text-[11px] text-slate-500 italic">
+          <p className="text-[11px] text-ink-lighter italic">
             No transfers planned yet.
           </p>
         ) : (
@@ -101,17 +101,17 @@ export default function PlanVsOriginalPanel() {
                   key={idx}
                   className="text-[11px] flex items-center gap-2"
                 >
-                  <span className="text-slate-500">GW{event.gameweek}</span>
+                  <span className="text-ink-lighter">GW{event.gameweek}</span>
                   <span
                     className={
                       event.type === "TRANSFER_IN"
-                        ? "text-green-400"
-                        : "text-red-400"
+                        ? "text-primary font-semibold"
+                        : "text-danger font-semibold"
                     }
                   >
                     {event.type === "TRANSFER_IN" ? "→ IN" : "← OUT"}
                   </span>
-                  <span className="text-slate-300 truncate">{playerName}</span>
+                  <span className="text-ink truncate">{playerName}</span>
                 </div>
               );
             })}
